@@ -27,6 +27,7 @@ while True:
     found = datfound + mp4found
     
     mode = input(f"{found}" + 
+                "\n--------------------------------" +
                 "\n1.将mp4转成dat" + 
                 "\n2.将dat转成mp4" + 
                 "\nq.退出" + 
