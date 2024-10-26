@@ -25,11 +25,11 @@ def convert_mp4_to_ivf(ffmpeg, input_directory, temp_directory):
                         ffmpeg,
                         "-i",
                         mp4_path,
-                        "-b:v", "800k",  # 设置视频比特率
-                        "-codec:v", "vp9",  # 使用 vp9_qsv 编解码器（若可用），否则使用 vp9
+                        "-b:v", "800k",
+                        "-codec:v", "vp9",
                         "-threads", "8",
-                        "-cpu-used", "4",  # 提高编码速度
-                        "-vf", "scale=1080:-1",  # 将视频缩放到 1080p
+                        "-cpu-used", "4",
+                        "-vf", "scale=1080:-1",
                         ivf_path
                     ], check=True)
                     print(f"Successfully converted {filename} to {ivf_path}")
@@ -44,7 +44,6 @@ def convert_ivf_to_usm(wannacri, temp_directory, output_directory):
             dat_path = os.path.join(output_directory, f"{os.path.splitext(filename)[0]}.dat")
             
             try:
-                # 创建 .usm 文件
                 subprocess.run([
                     wannacri,
                     "createusm",
@@ -54,8 +53,6 @@ def convert_ivf_to_usm(wannacri, temp_directory, output_directory):
                     "-k",
                     "0x7F4551499DF55E68",
                 ], check=True)
-                
-                # 将 .usm 文件重命名为 .dat 文件
                 os.rename(usm_path, dat_path)
                 print(f"Successfully converted {filename} to {dat_path}")
             except subprocess.CalledProcessError as e:
@@ -72,11 +69,7 @@ if __name__ == "__main__":
     encryption_key = '0x7F4551499DF55E68'
     ffmpeg = ROOT / 'ffmpeg.exe'
 
-    # Step 1: Convert MP4 to IVF
     convert_mp4_to_ivf(ffmpeg, input_directory, temp_directory)
-
-    # Step 2: Convert IVF to USM
     convert_ivf_to_usm(wannacri, temp_directory, output_directory)
     
-    # Clean up temporary files
     shutil.rmtree(temp_directory)
