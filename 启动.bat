@@ -1,3 +1,3 @@
 @echo off
 cd ./
-python ffmpeg
+python ffmpeg.py
