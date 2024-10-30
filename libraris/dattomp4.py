@@ -30,11 +30,20 @@ def convert_ivf_to_mp4(ffmpeg, temp_directory, output_directory):
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
 
+    # 遍历 temp_directory 下的所有子目录及文件
     for root, _, files in os.walk(temp_directory):
         for filename in files:
             if filename.endswith('.ivf'):
                 ivf_path = os.path.join(root, filename)
-                mp4_path = os.path.join(output_directory, f"{os.path.splitext(filename)[0]}.mp4")
+
+                # 获取 .dat 文件的基础名称
+                base_folder_name = Path(root).parent.name.replace(".bat", "")  # 获取父目录的名称
+
+                # 创建新的输出文件夹
+                output_folder = os.path.join(output_directory, base_folder_name)
+                os.makedirs(output_folder, exist_ok=True)
+                
+                mp4_path = os.path.join(output_folder, "pv.mp4")
 
                 try:
                     subprocess.run([
@@ -49,7 +58,7 @@ if __name__ == "__main__":
     temp_directory = ROOT.parent / 'temp'
     output_directory = ROOT.parent / 'output'
     wannacri = ROOT / 'wannacri.exe'
-    decryption_key = '0x7F4551499DF55E68'
+    decryption_key = '0x7F4551499DF55E68'  # 确保密钥格式正确
     ffmpeg = ROOT / 'ffmpeg.exe'
 
     decrypt_dat_files(wannacri, input_directory, temp_directory, decryption_key)

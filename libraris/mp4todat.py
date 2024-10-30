@@ -41,7 +41,7 @@ def convert_ivf_to_usm(wannacri, temp_directory, output_directory):
         if filename.endswith('.ivf'):
             ivf_path = os.path.join(temp_directory, filename)
             usm_path = os.path.join(temp_directory, f"{os.path.splitext(filename)[0]}.usm")
-            dat_path = os.path.join(output_directory, f"{os.path.splitext(filename)[0]}.dat")
+            dat_path = os.path.join(output_directory / "{filename}", f"{os.path.splitext(filename)[0]}.dat")
             
             try:
                 subprocess.run([

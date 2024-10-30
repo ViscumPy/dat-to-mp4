@@ -1,4 +1,6 @@
 input/*.dat
 input/*.mp4
+input/*
 output/*.mp4
 output/*.dat
+output/*
