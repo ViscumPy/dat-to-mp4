@@ -4,3 +4,4 @@ input/*
 output/*.mp4
 output/*.dat
 output/*
+temp

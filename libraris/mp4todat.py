@@ -26,22 +26,23 @@ def convert_mp4_to_ivf(ffmpeg, input_directory, temp_directory):
                         "-i",
                         mp4_path,
                         "-b:v", "800k",
-                        "-codec:v", "vp9",
-                        "-threads", "8",
-                        "-cpu-used", "4",
+                        "-c:v", "vp9",
+                        "-threads", "12",
+                        "-cpu-used", "8",
                         "-vf", "scale=1080:-1",
+                        "-y",
                         ivf_path
                     ], check=True)
                     print(f"Successfully converted {filename} to {ivf_path}")
                 except subprocess.CalledProcessError as e:
-                    print(f"Error converting {filename} to IVF: {e}")
+                    print (f"Error converting {filename} to IVF: {e}")
 
 def convert_ivf_to_usm(wannacri, temp_directory, output_directory):
     for filename in os.listdir(temp_directory):
         if filename.endswith('.ivf'):
             ivf_path = os.path.join(temp_directory, filename)
             usm_path = os.path.join(temp_directory, f"{os.path.splitext(filename)[0]}.usm")
-            dat_path = os.path.join(output_directory / "{filename}", f"{os.path.splitext(filename)[0]}.dat")
+            dat_path = os.path.join(output_directory, f"{os.path.splitext(filename)[0]}.dat")
             
             try:
                 subprocess.run([
@@ -55,10 +56,11 @@ def convert_ivf_to_usm(wannacri, temp_directory, output_directory):
                 ], check=True)
                 os.rename(usm_path, dat_path)
                 print(f"Successfully converted {filename} to {dat_path}")
+                return "Success"
             except subprocess.CalledProcessError as e:
-                print(f"Error converting {filename} to USM: {e}")
+                return f"Error converting {filename} to USM: {e}"
             except OSError as e:
-                print(f"Error renaming {usm_path} to {dat_path}: {e}")
+                return f"Error renaming {usm_path} to {dat_path}: {e}"
 
 
 if __name__ == "__main__":
@@ -70,6 +72,10 @@ if __name__ == "__main__":
     ffmpeg = ROOT / 'ffmpeg.exe'
 
     convert_mp4_to_ivf(ffmpeg, input_directory, temp_directory)
-    convert_ivf_to_usm(wannacri, temp_directory, output_directory)
-    
-    shutil.rmtree(temp_directory)
+    result = convert_ivf_to_usm(wannacri, temp_directory, output_directory)
+    if result == "Success":
+        shutil.rmtree(temp_directory)
+    else:
+        print(result)
+
+    #shutil.rmtree(temp_directory)
