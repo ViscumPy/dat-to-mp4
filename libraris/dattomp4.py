@@ -47,7 +47,7 @@ def convert_ivf_to_mp4(ffmpeg, temp_directory, output_directory):
 
                 try:
                     subprocess.run([
-                        ffmpeg, '-i', ivf_path, '-c:v', 'h264_nvenc', mp4_path
+                        ffmpeg, '-i', ivf_path, '-c:v', 'h264_nvenc', '-y', mp4_path
                     ], check=True)
                     print(f"Successfully converted {filename} to {mp4_path}")
                 except subprocess.CalledProcessError as e:
